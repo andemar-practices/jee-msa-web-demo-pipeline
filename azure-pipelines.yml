@@ -146,29 +146,29 @@ stages:
             displayName: 'Descarga CLI, Login y Despliegue Docker'
 
   # ==========================================
-  # STAGE 4: VERIFICACION (VERIFICATION)
+  # STAGE : NOTIFICACIONES (NOTIFICATIONS)
   # ==========================================
-  - stage: Verificacion_Adicional
-    displayName: 'Verificacion adicional'
+  - stage: Verification
+    displayName: 'Verificacion'
     dependsOn: [CI, Approval, CD]
     condition: always()
     jobs:
       - job: manual_gate
-        displayName: 'Esperando Verificacion adicional'
+        displayName: 'Esperando verificacion'
         pool: server
         steps:
           - task: ManualValidation@0
             inputs:
               notifyUsers: 'jefersonvillacis@hotmail.com'
-              instructions: 'Verificacion adicional requerida para ejecutar la fase de despliegue continuo en OpenShift Sandbox.'
+              instructions: 'Verificacion requerida para ejecutar la fase de despliegue continuo en OpenShift Sandbox.'
               onTimeout: 'reject'
 
   # ==========================================
   # STAGE 5: NOTIFICACIONES (NOTIFICATIONS)
   # ==========================================
   - stage: Notifications
-    displayName: 'Verificacion adicional'
-    dependsOn: [CI, Approval, CD]
+    displayName: 'Notificar'
+    dependsOn: [CI, Approval, CD, Verification]
     condition: always()
     jobs:
       - job: send_status_email
