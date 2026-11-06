@@ -148,7 +148,7 @@ stages:
   # ==========================================
   # STAGE 4: VERIFICACION (VERIFICATION)
   # ==========================================
-  - stage: Verificacion Adicional
+  - stage: Verificacion_Adicional
     displayName: 'Verificacion adicional'
     dependsOn: [CI, Approval, CD]
     condition: always()
