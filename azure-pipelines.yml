@@ -104,24 +104,6 @@ stages:
               onTimeout: 'reject'
 
   # ==========================================
-  # STAGE 2: APROBACIÓN ADICIONAL (APPROVAL)
-  # ==========================================
-  - stage: Approval_Adicional
-    displayName: 'Aprobacion adicional'
-    dependsOn: CI
-    condition: succeeded()
-    jobs:
-      - job: manual_gate
-        displayName: 'Esperando aprobación adicional'
-        pool: server
-        steps:
-          - task: ManualValidation@0
-            inputs:
-              notifyUsers: 'jefersonvillacis@hotmail.com'
-              instructions: 'Aprobación adicional requerida para ejecutar la fase de despliegue continuo en OpenShift Sandbox.'
-              onTimeout: 'reject'
-
-  # ==========================================
   # STAGE 3: DESPLIEGUE CONTINUO (CD)
   # ==========================================
   - stage: CD
@@ -167,10 +149,19 @@ stages:
   # STAGE 4: NOTIFICACIONES (NOTIFICATIONS)
   # ==========================================
   - stage: Notifications
-    displayName: 'Notificar'
+    displayName: 'Verificacion adicional'
     dependsOn: [CI, Approval, CD]
     condition: always()
     jobs:
+      - job: manual_gate
+        displayName: 'Esperando Verificacion adicional'
+        pool: server
+        steps:
+          - task: ManualValidation@0
+            inputs:
+              notifyUsers: 'jefersonvillacis@hotmail.com'
+              instructions: 'Verificacion adicional requerida para ejecutar la fase de despliegue continuo en OpenShift Sandbox.'
+              onTimeout: 'reject'
       - job: send_status_email
         displayName: 'Enviar Reporte'
         steps:
