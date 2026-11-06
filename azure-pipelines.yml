@@ -146,9 +146,9 @@ stages:
             displayName: 'Descarga CLI, Login y Despliegue Docker'
 
   # ==========================================
-  # STAGE 4: NOTIFICACIONES (NOTIFICATIONS)
+  # STAGE 4: VERIFICACION (VERIFICATION)
   # ==========================================
-  - stage: Notifications
+  - stage: Verificacion Adicional
     displayName: 'Verificacion adicional'
     dependsOn: [CI, Approval, CD]
     condition: always()
@@ -162,6 +162,15 @@ stages:
               notifyUsers: 'jefersonvillacis@hotmail.com'
               instructions: 'Verificacion adicional requerida para ejecutar la fase de despliegue continuo en OpenShift Sandbox.'
               onTimeout: 'reject'
+
+  # ==========================================
+  # STAGE 5: NOTIFICACIONES (NOTIFICATIONS)
+  # ==========================================
+  - stage: Notifications
+    displayName: 'Verificacion adicional'
+    dependsOn: [CI, Approval, CD]
+    condition: always()
+    jobs:
       - job: send_status_email
         displayName: 'Enviar Reporte'
         steps:
